@@ -1,7 +1,25 @@
+"use client"; // Add this directive at the top
+
 import styles from "./page.module.css";
-import ListButton from "./lib/ListButton";
+import { useState } from 'react';
+
+// components
+import ListButton from "./ui/ListButton";
 
 export default function Home() {
+  const [sampleProductLists, setSampleProductLists] = useState([
+    { listTitle: 'smell products', numProducts: 420 },
+    { listTitle: 'Electronics', numProducts: 12 },
+    { listTitle: 'Clothing', numProducts: 8 },
+    { listTitle: 'Books', numProducts: 25 },
+  ]);
+
+  // Function to add a new product list
+  const addProductList = () => {
+    const newList = { listTitle: 'New List', numProducts: 0 };
+    setSampleProductLists([...sampleProductLists, newList]);
+};
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -14,35 +32,22 @@ export default function Home() {
         </div>
 
         <div className={styles.listButtonsContainer}>
-          <ListButton 
-            listTitle={"smel products"}
-            numProducts={420}
-          />
-          <div className={styles.listButton}>
-            <div className={styles.listImage}></div>
-            <p>stinky gifts</p>
-            <p>2 products</p>
+          <div className={styles.createWishlistButtonContainer}>
+            <button 
+              className={styles.createWishlistButton}
+              onClick={addProductList}  
+            >
+              <span>+</span>
+              <span>Create Wishlist</span>
+            </button>
           </div>
-          <div className={styles.listButton}>
-            <div className={styles.listImage}></div>
-            <p>stinky gifts</p>
-            <p>2 products</p>
-          </div>
-          <div className={styles.listButton}>
-            <div className={styles.listImage}></div>
-            <p>stinky gifts</p>
-            <p>2 products</p>
-          </div>
-          <div className={styles.listButton}>
-            <div className={styles.listImage}></div>
-            <p>stinky gifts</p>
-            <p>2 products</p>
-          </div>
-          <div className={styles.listButton}>
-            <div className={styles.listImage}></div>
-            <p>stinky gifts</p>
-            <p>2 products</p>
-          </div>
+          {sampleProductLists.map((list, index) => (
+              <ListButton
+                  key={index}
+                  listTitle={list.listTitle}
+                  numProducts={list.numProducts}
+              />
+          ))}
         </div>
         
       </main>

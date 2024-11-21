@@ -83,6 +83,22 @@
   gap: 16px; /* Adjust spacing between cards */
 }
 
+.createWishlistButtonContainer {
+
+}
+
+.createWishlistButton {
+  border: 1px solid grey;
+  border-radius: 20px;
+  background: none;
+  height: 200px;
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .listButton {
   border: 1px solid white;
   border-radius: 20px;
