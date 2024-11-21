@@ -11,12 +11,12 @@ import NewWishlistSetupModal from "./ui/NewWishlistSetupModal";
 export default function Home() {
   // will remove this once we have a backend
   const [sampleProductLists, setSampleProductLists] = useState([
-    { listTitle: 'smell products', numProducts: 420, wishListDescription: 'for my smelly things' },
-    { listTitle: 'Electronics', numProducts: 12, wishListDescription: 'cool things' },
-    { listTitle: 'Clothing', numProducts: 8, wishListDescription: 'list of clothes I wnat' },
-    { listTitle: 'Books', numProducts: 25, wishListDescription: 'list of books I want' },
+    { wishlistId: '1', listTitle: 'smell products', numProducts: 420, wishListDescription: 'for my smelly things' },
+    { wishlistId: '2', listTitle: 'Electronics', numProducts: 12, wishListDescription: 'cool things' },
+    { wishlistId: '3', listTitle: 'Clothing', numProducts: 8, wishListDescription: 'list of clothes I wnat' },
+    { wishlistId: '4', listTitle: 'Books', numProducts: 25, wishListDescription: 'list of books I want' },
   ]);
-  const [showNewWishlistModal, setShowNewWishlistModal] = useState(true); 
+  const [showNewWishlistModal, setShowNewWishlistModal] = useState(false); 
   const openModal = () => setShowNewWishlistModal(true);
   const closeModal = () => setShowNewWishlistModal(false);
   const [newWishlistName, setNewWishlistName] = useState('');
@@ -31,10 +31,20 @@ export default function Home() {
     // e.preventDefault(); // Prevent default form submission behavior
     if (newWishlistName.trim() === '') return; // Avoid adding empty names
 
+    // get a GUID for the wishlist ID
+    function generateGUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const random = Math.random() * 16 | 0;
+        const value = c === 'x' ? random : (random & 0x3 | 0x8);
+        return value.toString(16);
+      });
+    }
+    
+
     // Add the new wishlist to the state
     setSampleProductLists((prevLists) => [
         ...prevLists,
-        { listTitle: newWishlistName, numProducts: 0, wishListDescription: newWishListDescription },
+        { wishlistId: generateGUID(), listTitle: newWishlistName, numProducts: 0, wishListDescription: newWishListDescription },
     ]);
 
     // Clear input and close the modal
@@ -87,6 +97,7 @@ export default function Home() {
           {sampleProductLists.map((list, index) => (
               <ListButton
                   key={index}
+                  wishlistId={list.wishlistId}
                   listTitle={list.listTitle}
                   numProducts={list.numProducts}
               />
