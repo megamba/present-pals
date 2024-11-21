@@ -32,6 +32,8 @@
   flex-direction: column;
   gap: 32px;
   grid-row-start: 2;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .main ol {
@@ -54,6 +56,53 @@
   padding: 2px 4px;
   border-radius: 4px;
   font-weight: 600;
+}
+
+.profileContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.profileImageContainer {
+  max-width: 180px;
+  height: auto;
+  border: 1px solid grey;
+  border-radius: 90px;
+}
+
+.profileName {
+  font-size: 32px;
+}
+
+.listButtonsContainer {
+  border: 1px solid red;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two equal columns */
+  gap: 16px; /* Adjust spacing between cards */
+}
+
+.listButton {
+  border: 1px solid white;
+  border-radius: 20px;
+  height: 200px;
+  width: 350px;
+}
+
+.listButton:nth-child(odd) {
+  grid-column: 1; /* Odd-indexed cards in the first column */
+}
+
+.listButton:nth-child(even) {
+  grid-column: 2; /* Even-indexed cards in the second column */
+}
+
+.listImage {
+  border: 1px solid grey;
+  border-radius: 20px;
+  height: 70%;
+  width: 100%;
 }
 
 .ctas {
@@ -95,7 +144,14 @@ a.secondary {
 .footer {
   grid-row-start: 3;
   display: flex;
+  flex-direction: column;
   gap: 24px;
+}
+
+.footerLinkContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
 
 .footer a {
