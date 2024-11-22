@@ -1,3 +1,9 @@
-export default function Page() {
-    return <p>Settings Page</p>;
+import React from 'react'
+
+function page() {
+  return (
+    <div>page</div>
+  )
 }
+
+export default page

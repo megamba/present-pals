@@ -1,0 +1,77 @@
+/* Main container for the Claimed page */
+.claimed-container {
+    padding: 2rem;
+    background-color: none; /* Light gray background */
+    min-height: 100vh;
+  }
+  
+  /* Title of the page */
+  .claimed-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #333;
+  }
+  
+  /* Container for the items */
+  .claimed-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; /* Space between items */
+  }
+  
+  /* Each claimed item card */
+  .claimed-item {
+    display: flex; /* To align image and details side by side */
+    align-items: center;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    padding: 1rem;
+  }
+  
+  .claimed-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* More pronounced shadow on hover */
+  }
+  
+  /* Item image */
+  .claimed-item-image {
+    width: 150px; /* Fixed width for image */
+    height: 150px; /* Fixed height for image */
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 1rem; /* Space between image and details */
+  }
+  
+  /* Details of the item */
+  .claimed-item-details {
+    flex: 1; /* Allow details to stretch */
+  }
+  
+  /* Item title */
+  .claimed-item-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #222;
+  }
+  
+  /* Item price */
+  .claimed-item-price {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #4caf50; /* Green for price */
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Gifted by text */
+  .claimed-item-gifted-for {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  
