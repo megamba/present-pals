@@ -1,0 +1,20 @@
+.listButton {
+  border-radius: 20px;
+  height: 200px;
+  width: 350px;
+}
+
+.listImage {
+  border: 1px solid grey;
+  border-radius: 20px;
+  height: 70%;
+  width: 100%;
+}
+
+.listButton:nth-child(odd) {
+  grid-column: 1; /* Odd-indexed cards in the first column */
+}
+
+.listButton:nth-child(even) {
+  grid-column: 2; /* Even-indexed cards in the second column */
+}

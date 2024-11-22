@@ -77,14 +77,45 @@
 }
 
 .listButtonsContainer {
-  border: 1px solid red;
   display: grid;
   grid-template-columns: 1fr 1fr; /* Two equal columns */
   gap: 16px; /* Adjust spacing between cards */
 }
 
+.createWishlistButtonContainer {
+
+}
+
+.createWishlistButton {
+  border: 1px solid grey;
+  border-radius: 20px;
+  background: none;
+  height: 200px;
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.newWishlistFormContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.newWishlistFormContainer > label {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.newWishlistFormContainer > label > input {
+  background: none;
+  border: 1px solid black;
+}
+
 .listButton {
-  border: 1px solid white;
   border-radius: 20px;
   height: 200px;
   width: 350px;
