@@ -1,0 +1,62 @@
+/* Root layout body styles */
+.root-layout-body {
+    background-color: white;
+    font-family: 'Inter', sans-serif; /* Replace with actual imported font if needed */
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Layout container */
+  .layout-container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh; /* Ensure the layout container takes up the full viewport height */
+    overflow: hidden;
+  }
+  
+  /* Main content area */
+  .main-content {
+    flex: 1; /* Allows the main content to take up remaining space */
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  
+
+
+
+  /*Wrappers*/
+  /* Page wrapper styles */
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding-top: 2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+  background-color: #c2c2c2; /* Equivalent to bg-zinc-100 */
+  flex-grow: 1;
+  gap: 0.5rem; /* Equivalent to space-y-2 */
+}
+
+/* MarginWidthWrapper styles */
+.margin-width-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Equivalent to min-h-screen */
+}
+
+/* Add margin and border styling for medium screen sizes */
+@media (min-width: 768px) {
+  .margin-width-wrapper {
+    margin-left: 11rem; /* Equivalent to md:ml-60 */
+  }
+}
+
+/* Add border styles for small screen sizes */
+@media (max-width: 767px) {
+  .margin-width-wrapper {
+    border-right: 1px solid #4b5563; /* Equivalent to sm:border-r sm:border-zinc-700 */
+  }
+
+}

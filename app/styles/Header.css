@@ -1,0 +1,91 @@
+/* Header container */
+.header-container {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    width: 100%;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid #e5e7eb; /*Equivalent to border-gray-200*/
+    background-color: rgba(255, 255, 255, 1);
+  }
+  
+  .header-container.scrolled {
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.75); /* bg-white/75 */
+  }
+  
+  .header-container.selected-layout {
+    background-color: white;
+  }
+  
+  /* Header content */
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    padding: 0 1rem;
+  }
+  
+  /* Logo container */
+  .header-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .mobile-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  
+  .header-logo-icon {
+    height: 28px;
+    width: 28px;
+    background-image: url(/logo.png); /* Your logo image */
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .header-logo-text {
+    font-weight: bold;
+    font-size: 1.25rem; /* text-xl */
+  }
+  
+  /* Desktop icon */
+  .desktop-icon {
+    display: none;
+
+  }
+  
+  .icon {
+    height: 32px;
+    width: 32px;
+    background-color: #cfcfcf; /* bg-zinc-300 */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .icon-text {
+    font-weight: 600;
+    font-size: 0.875rem; /* text-sm */
+  }
+  
+  /* Media queries */
+  @media (min-width: 768px) {
+    .desktop-icon{
+        display: block;
+    } 
+    .mobile-logo {
+      display: none;
+    }
+    .header-content{
+        justify-content: flex-end;
+    }
+  }
+  
