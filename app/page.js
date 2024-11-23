@@ -1,7 +1,10 @@
 "use client"; // Add this directive at the top
 
 import styles from "./page.module.css";
-import { useState } from 'react';
+import { useEffect, useState } from 'react'
+
+// data models
+import { Wishlist, Product } from "@/app/lib/models"
 
 // components
 import CreateWishlistButton from "./ui/CreateWishlistButton";
@@ -10,48 +13,79 @@ import NewWishlistSetupModal from "./ui/NewWishlistSetupModal";
 
 export default function Home() {
   // will remove this once we have a backend
-  const [sampleProductLists, setSampleProductLists] = useState([
-    { wishlistId: '1', listTitle: 'smell products', numProducts: 420, wishListDescription: 'for my smelly things' },
-    { wishlistId: '2', listTitle: 'Electronics', numProducts: 12, wishListDescription: 'cool things' },
-    { wishlistId: '3', listTitle: 'Clothing', numProducts: 8, wishListDescription: 'list of clothes I wnat' },
-    { wishlistId: '4', listTitle: 'Books', numProducts: 25, wishListDescription: 'list of books I want' },
-  ]);
+  const sampleProducts = [
+    new Product({productId: `product-${generateGUID()}`, productTitle: "Product A",
+     productPrice: 19.99, productDescription: "Description of Product A", 
+     productQuantity: 1, productFavorited: true}),
+     new Product({productId: `product-${generateGUID()}`, productTitle: "Product B",
+     productPrice: 29.99, productDescription: "Description of Product B", 
+     productQuantity: 2, productFavorited: false}),
+    new Product({productId: `product-${generateGUID()}`, productTitle: "Product C",
+     productPrice: 39.99, productDescription: "Description of Product C", 
+     productQuantity: 7, productFavorited: false}),
+  ];
+
+  const sampleWishlists = [
+    new Wishlist({wishlistId: `wishlist-${generateGUID()}`, wishlistTitle: "Birthday Wishlist", 
+      wishlistProductList: sampleProducts, wishlistNumProducts: sampleProducts.length, wishlistType: "Wishlist", wishlistEventDate: "2024-12-10", 
+      wishlistRecipient: "Nathan"}),
+    new Wishlist({wishlistId: `wishlist-${generateGUID()}`, wishlistTitle: "xxx", 
+      wishlistProductList: sampleProducts, wishlistNumProducts: sampleProducts.length, wishlistType: "Wishlist", wishlistEventDate: "2025-05-15", 
+      wishlistRecipient: "Michelle"}),
+    new Wishlist({wishlistId: `wishlist-${generateGUID()}`, wishlistTitle: "Self-help books", 
+      wishlistProductList: sampleProducts, wishlistNumProducts: sampleProducts.length, wishlistType: "Wishlist", wishlistEventDate: "2024-11-30", 
+      wishlistRecipient: "Jackie"}),
+  ];
+  const [sampleProductLists, setSampleProductLists] = useState(sampleWishlists);
   const [showNewWishlistModal, setShowNewWishlistModal] = useState(false); 
   const openModal = () => setShowNewWishlistModal(true);
   const closeModal = () => setShowNewWishlistModal(false);
   const [newWishlistName, setNewWishlistName] = useState('');
   const [newWishListDescription, setNewWishListDescription] = useState('');
 
+  // debugging
+  useEffect(() => {
+    console.log(sampleProductLists.length, " wishlists");
+  }, [sampleProductLists]);
+
   const handleCreateWishlistClick = () => {
     openModal();
     // addProductList();
   };
 
+  // get a GUID for the wishlist ID
+  function generateGUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const random = Math.random() * 16 | 0;
+      const value = c === 'x' ? random : (random & 0x3 | 0x8);
+      return value.toString(16);
+    });
+  }
+
   const handleAddWishlist = (e) => {
-    // e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault(); // Prevent default form submission behavior
     if (newWishlistName.trim() === '') return; // Avoid adding empty names
 
-    // get a GUID for the wishlist ID
-    function generateGUID() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        const random = Math.random() * 16 | 0;
-        const value = c === 'x' ? random : (random & 0x3 | 0x8);
-        return value.toString(16);
-      });
-    }
-    
+
+     // add a new Wishlist to the existing wishlist array
+     const newWishlist = new Wishlist({
+        wishlistId: `wishlist-${generateGUID()}`,
+        wishlistTitle: newWishlistName,
+        wishlistProductList: sampleProducts, 
+        wishlistNumProducts: sampleProducts.length, 
+        wishlistType: "Wishlist", 
+        wishlistEventDate: "2024-12-10", 
+        wishlistRecipient: "Nathan", 
+    });
 
     // Add the new wishlist to the state
-    setSampleProductLists((prevLists) => [
-        ...prevLists,
-        { wishlistId: generateGUID(), listTitle: newWishlistName, numProducts: 0, wishListDescription: newWishListDescription },
-    ]);
-
+    setSampleProductLists((prevLists) => [...prevLists, newWishlist]);
+    
     // Clear input and close the modal
     setNewWishlistName('');
     setNewWishListDescription('');
     closeModal();
-};
+  };
 
   
 
@@ -98,8 +132,8 @@ export default function Home() {
               <ListButton
                   key={index}
                   wishlistId={list.wishlistId}
-                  listTitle={list.listTitle}
-                  numProducts={list.numProducts}
+                  listTitle={list.wishlistTitle}
+                  numProducts={list.wishlistNumProducts}
               />
           ))}
         </div>
