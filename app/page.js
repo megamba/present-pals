@@ -16,7 +16,7 @@ export default function Home() {
     { listTitle: 'Clothing', numProducts: 8, wishListDescription: 'list of clothes I wnat' },
     { listTitle: 'Books', numProducts: 25, wishListDescription: 'list of books I want' },
   ]);
-  const [showNewWishlistModal, setShowNewWishlistModal] = useState(true); 
+  const [showNewWishlistModal, setShowNewWishlistModal] = useState(false); 
   const openModal = () => setShowNewWishlistModal(true);
   const closeModal = () => setShowNewWishlistModal(false);
   const [newWishlistName, setNewWishlistName] = useState('');
