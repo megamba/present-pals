@@ -6,11 +6,11 @@ export default function ListButton({wishlistId, listTitle, numProducts}) {
     console.log("wishlistID: ", wishlistId);
     return(
         <div className={styles.listButton}>
-            {/* <Link href={`/wishlists?id=${wishlistItem.wishlistId}`}> */}
+            <Link href={`/wishlist?id=${wishlistId}`}>
                 <div className={styles.listImage}></div>
                 <p>{listTitle}</p>
                 <p>{numProducts} products</p>
-            {/* </Link> */}
+            </Link>
         </div>
     );
 };

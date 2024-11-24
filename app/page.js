@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react'
 
 // data models
 import { Wishlist, Product } from "@/app/lib/models"
+import { sampleWishlists } from "@/app/lib/sampleData";
+import { getUserId } from "./lib/firebase";
 
 // components
 import CreateWishlistButton from "./ui/CreateWishlistButton";
@@ -25,23 +27,24 @@ export default function Home() {
      productQuantity: 7, productFavorited: false}),
   ];
 
-  const sampleWishlists = [
-    new Wishlist({wishlistId: `wishlist-${generateGUID()}`, wishlistTitle: "Birthday Wishlist", 
-      wishlistProductList: sampleProducts, wishlistNumProducts: sampleProducts.length, wishlistType: "Wishlist", wishlistEventDate: "2024-12-10", 
-      wishlistRecipient: "Nathan"}),
-    new Wishlist({wishlistId: `wishlist-${generateGUID()}`, wishlistTitle: "xxx", 
-      wishlistProductList: sampleProducts, wishlistNumProducts: sampleProducts.length, wishlistType: "Wishlist", wishlistEventDate: "2025-05-15", 
-      wishlistRecipient: "Michelle"}),
-    new Wishlist({wishlistId: `wishlist-${generateGUID()}`, wishlistTitle: "Self-help books", 
-      wishlistProductList: sampleProducts, wishlistNumProducts: sampleProducts.length, wishlistType: "Wishlist", wishlistEventDate: "2024-11-30", 
-      wishlistRecipient: "Jackie"}),
-  ];
+  // const sampleWishlists = [
+  //   new Wishlist({wishlistId: `wishlist-${generateGUID()}`, wishlistTitle: "Birthday Wishlist", 
+  //     wishlistProductList: sampleProducts, wishlistNumProducts: sampleProducts.length, wishlistType: "Wishlist", wishlistEventDate: "2024-12-10", 
+  //     wishlistRecipient: "Nathan"}),
+  //   new Wishlist({wishlistId: `wishlist-${generateGUID()}`, wishlistTitle: "xxx", 
+  //     wishlistProductList: sampleProducts, wishlistNumProducts: sampleProducts.length, wishlistType: "Wishlist", wishlistEventDate: "2025-05-15", 
+  //     wishlistRecipient: "Michelle"}),
+  //   new Wishlist({wishlistId: `wishlist-${generateGUID()}`, wishlistTitle: "Self-help books", 
+  //     wishlistProductList: sampleProducts, wishlistNumProducts: sampleProducts.length, wishlistType: "Wishlist", wishlistEventDate: "2024-11-30", 
+  //     wishlistRecipient: "Jackie"}),
+  // ];
   const [sampleProductLists, setSampleProductLists] = useState(sampleWishlists);
   const [showNewWishlistModal, setShowNewWishlistModal] = useState(false); 
   const openModal = () => setShowNewWishlistModal(true);
   const closeModal = () => setShowNewWishlistModal(false);
   const [newWishlistName, setNewWishlistName] = useState('');
   const [newWishListDescription, setNewWishListDescription] = useState('');
+  const userId = getUserId();
 
   // debugging
   useEffect(() => {
@@ -128,7 +131,9 @@ export default function Home() {
 
         <div className={styles.listButtonsContainer}>
           <CreateWishlistButton onClick={handleCreateWishlistClick}/>
-          {sampleProductLists.map((list, index) => (
+          {sampleProductLists
+          .filter(list => list.userId === userId)
+          .map((list, index) => (
               <ListButton
                   key={index}
                   wishlistId={list.wishlistId}

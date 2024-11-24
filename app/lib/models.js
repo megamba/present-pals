@@ -1,6 +1,7 @@
 export class Wishlist {
-    constructor({wishlistId, wishlistTitle, wishlistProductList, wishlistNumProducts, 
+    constructor({userId, wishlistId, wishlistTitle, wishlistProductList, wishlistNumProducts, 
         wishlistType, wishlistEventDate, wishlistRecipient}) {
+        this.userId = userId;
       this.wishlistId = wishlistId;
       this.wishlistTitle = wishlistTitle;
       this.wishlistProductList = wishlistProductList;
