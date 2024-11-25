@@ -1,7 +1,12 @@
-"use client"; // Add this directive at the top
-
+"use client"; 
 import styles from "./page.module.css";
-import { useState } from 'react';
+import { useEffect, useState } from 'react'
+
+// data models
+import { Wishlist, Product } from "@/app/lib/models"
+import { sampleProducts, sampleWishlists } from "@/app/lib/sampleData";
+import { getUserId } from "./lib/firebase";
+import { generateGUID } from "@/app/lib/generateGUID";
 
 // components
 import CreateWishlistButton from "./ui/CreateWishlistButton";
@@ -9,18 +14,18 @@ import ListButton from "./ui/ListButton";
 import NewWishlistSetupModal from "./ui/NewWishlistSetupModal";
 
 export default function Home() {
-  // will remove this once we have a backend
-  const [sampleProductLists, setSampleProductLists] = useState([
-    { listTitle: 'smell products', numProducts: 420, wishListDescription: 'for my smelly things' },
-    { listTitle: 'Electronics', numProducts: 12, wishListDescription: 'cool things' },
-    { listTitle: 'Clothing', numProducts: 8, wishListDescription: 'list of clothes I wnat' },
-    { listTitle: 'Books', numProducts: 25, wishListDescription: 'list of books I want' },
-  ]);
-  const [showNewWishlistModal, setShowNewWishlistModal] = useState(true); 
+  const [sampleProductLists, setSampleProductLists] = useState(sampleWishlists);
+  const [showNewWishlistModal, setShowNewWishlistModal] = useState(false); 
   const openModal = () => setShowNewWishlistModal(true);
   const closeModal = () => setShowNewWishlistModal(false);
   const [newWishlistName, setNewWishlistName] = useState('');
   const [newWishListDescription, setNewWishListDescription] = useState('');
+  const userId = getUserId();
+
+  // debugging
+  useEffect(() => {
+    console.log(sampleProductLists.length, " wishlists");
+  }, [sampleProductLists]);
 
   const handleCreateWishlistClick = () => {
     openModal();
@@ -28,20 +33,29 @@ export default function Home() {
   };
 
   const handleAddWishlist = (e) => {
-    // e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault(); // Prevent default form submission behavior
     if (newWishlistName.trim() === '') return; // Avoid adding empty names
 
-    // Add the new wishlist to the state
-    setSampleProductLists((prevLists) => [
-        ...prevLists,
-        { listTitle: newWishlistName, numProducts: 0, wishListDescription: newWishListDescription },
-    ]);
 
+     // add a new Wishlist to the existing wishlist array
+     const newWishlist = new Wishlist({
+        wishlistId: `wishlist-${generateGUID()}`,
+        wishlistTitle: newWishlistName,
+        wishlistProductList: [], 
+        wishlistNumProducts: 0, 
+        wishlistType: "Wishlist", 
+        wishlistEventDate: "2024-12-10", // TODO: set this via text input
+        wishlistRecipient: userId, 
+    });
+
+    // Add the new wishlist to the state
+    setSampleProductLists((prevLists) => [...prevLists, newWishlist]);
+    
     // Clear input and close the modal
     setNewWishlistName('');
     setNewWishListDescription('');
     closeModal();
-};
+  };
 
   
 
@@ -84,11 +98,14 @@ export default function Home() {
 
         <div className={styles.listButtonsContainer}>
           <CreateWishlistButton onClick={handleCreateWishlistClick}/>
-          {sampleProductLists.map((list, index) => (
+          {sampleProductLists
+          .filter(list => list.userId === userId)
+          .map((list, index) => (
               <ListButton
                   key={index}
-                  listTitle={list.listTitle}
-                  numProducts={list.numProducts}
+                  wishlistId={list.wishlistId}
+                  listTitle={list.wishlistTitle}
+                  numProducts={list.wishlistNumProducts}
               />
           ))}
         </div>
