@@ -1,16 +1,23 @@
-import React from "react";
-import Link from "next/link";
-import styles from "./ListButton.module.css";
+"use client";
+import { useRouter } from 'next/navigation';
+import styles from './ListButton.module.css';
 
-export default function ListButton({wishlistId, listTitle, numProducts}) {
-    console.log("wishlistID: ", wishlistId);
-    return(
-        <div className={styles.listButton}>
-            <Link href={`/wishlist?id=${wishlistId}`}>
-                <div className={styles.listImage}></div>
-                <p>{listTitle}</p>
-                <p>{numProducts} products</p>
-            </Link>
-        </div>
-    );
-};
+export default function ListButton({ wishlistId, listTitle, numProducts }) {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/wishlist/${wishlistId}`);
+  };
+
+  return (
+    <button
+      onClick={handleClick}
+      className={styles.listButton}
+    >
+      <div className={styles.listButtonContent}>
+        <h3>{listTitle}</h3>
+        <p>{numProducts} items</p>
+      </div>
+    </button>
+  );
+}

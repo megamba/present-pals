@@ -1,12 +1,12 @@
-"use client"; // Add this directive at the top
-
+"use client"; 
 import styles from "./page.module.css";
 import { useEffect, useState } from 'react'
 
 // data models
 import { Wishlist, Product } from "@/app/lib/models"
-import { sampleWishlists } from "@/app/lib/sampleData";
+import { sampleProducts, sampleWishlists } from "@/app/lib/sampleData";
 import { getUserId } from "./lib/firebase";
+import { generateGUID } from "@/app/lib/generateGUID";
 
 // components
 import CreateWishlistButton from "./ui/CreateWishlistButton";
@@ -14,30 +14,6 @@ import ListButton from "./ui/ListButton";
 import NewWishlistSetupModal from "./ui/NewWishlistSetupModal";
 
 export default function Home() {
-  // will remove this once we have a backend
-  const sampleProducts = [
-    new Product({productId: `product-${generateGUID()}`, productTitle: "Product A",
-     productPrice: 19.99, productDescription: "Description of Product A", 
-     productQuantity: 1, productFavorited: true}),
-     new Product({productId: `product-${generateGUID()}`, productTitle: "Product B",
-     productPrice: 29.99, productDescription: "Description of Product B", 
-     productQuantity: 2, productFavorited: false}),
-    new Product({productId: `product-${generateGUID()}`, productTitle: "Product C",
-     productPrice: 39.99, productDescription: "Description of Product C", 
-     productQuantity: 7, productFavorited: false}),
-  ];
-
-  // const sampleWishlists = [
-  //   new Wishlist({wishlistId: `wishlist-${generateGUID()}`, wishlistTitle: "Birthday Wishlist", 
-  //     wishlistProductList: sampleProducts, wishlistNumProducts: sampleProducts.length, wishlistType: "Wishlist", wishlistEventDate: "2024-12-10", 
-  //     wishlistRecipient: "Nathan"}),
-  //   new Wishlist({wishlistId: `wishlist-${generateGUID()}`, wishlistTitle: "xxx", 
-  //     wishlistProductList: sampleProducts, wishlistNumProducts: sampleProducts.length, wishlistType: "Wishlist", wishlistEventDate: "2025-05-15", 
-  //     wishlistRecipient: "Michelle"}),
-  //   new Wishlist({wishlistId: `wishlist-${generateGUID()}`, wishlistTitle: "Self-help books", 
-  //     wishlistProductList: sampleProducts, wishlistNumProducts: sampleProducts.length, wishlistType: "Wishlist", wishlistEventDate: "2024-11-30", 
-  //     wishlistRecipient: "Jackie"}),
-  // ];
   const [sampleProductLists, setSampleProductLists] = useState(sampleWishlists);
   const [showNewWishlistModal, setShowNewWishlistModal] = useState(false); 
   const openModal = () => setShowNewWishlistModal(true);
@@ -56,15 +32,6 @@ export default function Home() {
     // addProductList();
   };
 
-  // get a GUID for the wishlist ID
-  function generateGUID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      const random = Math.random() * 16 | 0;
-      const value = c === 'x' ? random : (random & 0x3 | 0x8);
-      return value.toString(16);
-    });
-  }
-
   const handleAddWishlist = (e) => {
     e.preventDefault(); // Prevent default form submission behavior
     if (newWishlistName.trim() === '') return; // Avoid adding empty names
@@ -74,11 +41,11 @@ export default function Home() {
      const newWishlist = new Wishlist({
         wishlistId: `wishlist-${generateGUID()}`,
         wishlistTitle: newWishlistName,
-        wishlistProductList: sampleProducts, 
-        wishlistNumProducts: sampleProducts.length, 
+        wishlistProductList: [], 
+        wishlistNumProducts: 0, 
         wishlistType: "Wishlist", 
-        wishlistEventDate: "2024-12-10", 
-        wishlistRecipient: "Nathan", 
+        wishlistEventDate: "2024-12-10", // TODO: set this via text input
+        wishlistRecipient: userId, 
     });
 
     // Add the new wishlist to the state

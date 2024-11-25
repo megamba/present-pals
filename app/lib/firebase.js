@@ -17,8 +17,8 @@
 
 // Function to check for authenticated user and get their UID
 export const getUserId = () => {
-    // return "user-1234567890";
-    return "user-12121212";
+    return "user-1234567890";
+    // return "user-12121212";
     // return "user-33415";
 //   return new Promise((resolve, reject) => {
 //     const user = auth.currentUser;

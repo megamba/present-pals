@@ -27,3 +27,18 @@ export class Product {
         this.productFavorited = productFavorited
     }
 }
+
+export class User {
+    constructor({userId, firstName, lastName, wishlists, friends, settings, 
+        profilePicture, claimedItems
+    }) {
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.wishlists = wishlists;
+        this.friends = friends;
+        this.settings = settings;
+        this.profilePicture = profilePicture;
+        this.claimedItems = claimedItems;
+    }
+}
