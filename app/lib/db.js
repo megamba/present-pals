@@ -30,3 +30,15 @@ export async function fetchWishlistById(userId, wishlistId) {
     }, 500);
   });
 }
+
+
+export async function addWishlist(userId, wishlistData) {
+  console.log("Adding wishlist to sampleWishlists: ", wishlistData);
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      sampleWishlists.push(wishlistData);
+      console.log("Wishlist added to sampleWishlists: ", sampleWishlists);
+      resolve(wishlistData || null);
+    }, 500);
+  });
+}

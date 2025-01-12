@@ -6,7 +6,8 @@ import { useEffect, useState } from 'react'
 import { Wishlist, Product } from "@/app/lib/models"
 import { sampleProducts, sampleWishlists } from "@/app/lib/sampleData";
 import { getUserId } from "./lib/firebase";
-import { generateGUID } from "@/app/lib/generateGUID";
+import generateGUID from "@/app/lib/generateGUID";
+import { addWishlist, fetchUserWishlists } from "@/app/lib/db";
 
 // components
 import CreateWishlistButton from "./ui/CreateWishlistButton";
@@ -14,47 +15,111 @@ import ListButton from "./ui/ListButton";
 import NewWishlistSetupModal from "./ui/NewWishlistSetupModal";
 
 export default function Home() {
-  const [sampleProductLists, setSampleProductLists] = useState(sampleWishlists);
+  // const [sampleProductLists, setSampleProductLists] = useState(sampleWishlists);
+  const [sampleProductLists, setSampleProductLists] = useState([]);
   const [showNewWishlistModal, setShowNewWishlistModal] = useState(false); 
   const openModal = () => setShowNewWishlistModal(true);
   const closeModal = () => setShowNewWishlistModal(false);
   const [newWishlistName, setNewWishlistName] = useState('');
   const [newWishListDescription, setNewWishListDescription] = useState('');
   const userId = getUserId();
+  const [wishlists, setWishlists] = useState([]);
+
+  console.log("userId", userId);
 
   // debugging
   useEffect(() => {
     console.log(sampleProductLists.length, " wishlists");
   }, [sampleProductLists]);
 
+  // run when userId is fetched
+  useEffect(() => {
+    async function fetchWishlists() {
+      const userWishlists = await fetchUserWishlists(userId);
+      setWishlists(userWishlists);
+    }
+    fetchWishlists();
+  }, [userId]);
+
+  // Fetch wishlists on component mount
+  useEffect(() => {
+    async function fetchWishlists() {
+      const userWishlists = await fetchUserWishlists(userId);
+      setWishlists(userWishlists);
+    }
+    fetchWishlists();
+  }, []);
+
   const handleCreateWishlistClick = () => {
     openModal();
     // addProductList();
   };
 
-  const handleAddWishlist = (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
-    if (newWishlistName.trim() === '') return; // Avoid adding empty names
+  // const handleAddWishlist = (e) => {
+  //   e.preventDefault(); // Prevent default form submission behavior
+  //   if (newWishlistName.trim() === '') return; // Avoid adding empty names
+
+  //   console.log("running handleAddWishlist()")
 
 
-     // add a new Wishlist to the existing wishlist array
-     const newWishlist = new Wishlist({
-        wishlistId: `wishlist-${generateGUID()}`,
-        wishlistTitle: newWishlistName,
-        wishlistProductList: [], 
-        wishlistNumProducts: 0, 
-        wishlistType: "Wishlist", 
-        wishlistEventDate: "2024-12-10", // TODO: set this via text input
-        wishlistRecipient: userId, 
-    });
+  //    // add a new Wishlist to the existing wishlist array
+  //    const newWishlist = new Wishlist({
+  //       userId: userId,
+  //       wishlistId: `wishlist-${generateGUID}`,
+  //       wishlistTitle: newWishlistName,
+  //       wishlistProductList: [], 
+  //       wishlistNumProducts: 0, 
+  //       wishlistType: "Wishlist", 
+  //       wishlistEventDate: "2024-12-10", // TODO: set this via text input
+  //       wishlistRecipient: userId, 
+  //   });
+  //   console.log("new wishlist data", newWishlist);
 
-    // Add the new wishlist to the state
-    setSampleProductLists((prevLists) => [...prevLists, newWishlist]);
+  //   // Add the new wishlist to the state
+  //   // setSampleProductLists((prevLists) => [...prevLists, newWishlist]);
+
+  //   addWishlist(userId, newWishlist)
     
-    // Clear input and close the modal
-    setNewWishlistName('');
-    setNewWishListDescription('');
-    closeModal();
+  //   // Clear input and close the modal
+  //   setNewWishlistName('');
+  //   setNewWishListDescription('');
+  //   closeModal();
+  // };
+
+  const handleAddWishlist = async (e) => {
+    e.preventDefault(); // Prevent default form submission behavior
+  
+    if (newWishlistName.trim() === '') return; // Avoid adding empty names
+  
+    console.log("running handleAddWishlist()");
+  
+    // Create a new Wishlist object
+    const newWishlist = {
+      userId: userId,
+      wishlistId: `wishlist-${generateGUID()}`, // Assuming generateGUID() is a function
+      wishlistTitle: newWishlistName,
+      wishlistProductList: [],
+      wishlistNumProducts: 0,
+      wishlistType: "Wishlist",
+      wishlistEventDate: "2024-12-10", // TODO: Make this dynamic
+      wishlistRecipient: userId,
+    };
+  
+    console.log("New wishlist data:", newWishlist);
+  
+    try {
+      // Call the addWishlist function and update the state
+      const addedWishlist = await addWishlist(userId, newWishlist);
+      setWishlists((prevWishlists) => [...prevWishlists, addedWishlist]);
+      console.log("Wishlist successfully added:", addedWishlist);
+  
+      // Clear input and close the modal
+      setNewWishlistName('');
+      setNewWishListDescription('');
+      closeModal();
+    } catch (error) {
+      console.error("Error adding wishlist:", error);
+    }
   };
 
   

@@ -13,7 +13,7 @@ export const sampleProducts = {
        productQuantity: 7, productFavorited: false}),
 };
 
-export const sampleWishlists = [
+export let sampleWishlists = [
     new Wishlist({userId: "user-1234567890", wishlistId: "wishlist-guid1", wishlistTitle: "Birthday Wishlist", 
       wishlistProductList: [sampleProducts["productA"], sampleProducts["productB"]], wishlistNumProducts: sampleProducts.length,
       wishlistType: "Wishlist", wishlistEventDate: "2024-12-10", wishlistRecipient: "user-1234567890"}),
