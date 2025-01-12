@@ -3,6 +3,7 @@ import { use, useEffect, useState } from 'react';
 import { getUserId } from '@/app/lib/firebase';
 import { fetchWishlistById } from '@/app/lib/db';
 import styles from './wishlistpage.module.css';
+import ProductModal from '../../ui/ProductModal';
 
 export default function WishlistPage({ params }) {
   const reoslvedParams = use(params);
@@ -10,6 +11,8 @@ export default function WishlistPage({ params }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const userId = getUserId();
+  const [isProductModalOpen, setisProductModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     console.log("WishlistPage: ", reoslvedParams.wishlistId)
@@ -37,6 +40,17 @@ export default function WishlistPage({ params }) {
     loadWishlist();
   }, [reoslvedParams.wishlistId, userId]);
 
+  // handle ProductModal display
+  const handleOpenModal = (product) => {
+    setSelectedProduct(product);
+    setisProductModalOpen(true);
+  };
+  
+  const handleCloseModal = () => {
+    setisProductModalOpen(false);
+    setSelectedProduct(null);
+  };
+
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
@@ -62,6 +76,7 @@ export default function WishlistPage({ params }) {
 
   return (
     <div className={styles.container}>
+      
       <div className={styles.content}>
         <div className={styles.header}>
           <h1 className={styles.title}>{wishlist?.wishlistTitle}</h1>
@@ -87,9 +102,16 @@ export default function WishlistPage({ params }) {
             {wishlist?.wishlistProductList?.length > 0 ? (
               <div className={styles.productsGrid}>
                 {wishlist.wishlistProductList.map((product) => (
+                  // <Product button>
                   <div
                     key={product.productId}
                     className={styles.productCard}
+                    onClick={() => handleOpenModal(product)} // Add click handler
+                    role="button"
+                    tabIndex={0}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') handleOpenModal(product);
+                    }}
                   >
                     {product.productImage && (
                       <img 
@@ -109,6 +131,7 @@ export default function WishlistPage({ params }) {
                         target="_blank"
                         rel="noopener noreferrer"
                         className={styles.productLink}
+                        onClick={(e) => e.stopPropagation()}
                       >
                         View Product
                       </a>
@@ -123,7 +146,13 @@ export default function WishlistPage({ params }) {
             ) : (
               <p className={styles.detailText}>No products added to this wishlist yet.</p>
             )}
+            
           </div>
+      <ProductModal 
+        isOpen={isProductModalOpen}
+        onClose={handleCloseModal}
+        product={selectedProduct}
+      />
         </div>
       </div>
     </div>

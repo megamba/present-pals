@@ -15,16 +15,21 @@ export class Wishlist {
 export class Product {
     constructor({productId, productTitle, productPrice, productImage, 
         productPrimaryLink, productAlternativeLinks, productDescription, 
-        productQuantity, productFavorited}) {
-        this.productId = productId;
-        this.productTitle = productTitle;
-        this.productPrice = productPrice;
-        this.productImage = productImage;
-        this.productPrimaryLink = productPrimaryLink;
-        this.productAlternativeLinks = productAlternativeLinks;
-        this.productDescription = this.productDescription;
-        this.productQuantity = this.productQuantity;
-        this.productFavorited = productFavorited
+        productQuantity, productFavorited, ownerId, dateAdded, parentWishlist}) {
+            this.claimedBy = null;
+            this.dateAdded = dateAdded;
+            this.ownerId = ownerId;
+            this.productAlternativeLinks = productAlternativeLinks;
+            this.productClaimed = false;
+            this.productDescription = this.productDescription;
+            this.productFavorited = productFavorited;
+            this.productId = productId;
+            this.productImage = productImage;
+            this.productPrice = productPrice;
+            this.productPrimaryLink = productPrimaryLink;
+            this.productQuantity = this.productQuantity;
+            this.productTitle = productTitle;
+            this.parentWishlist = parentWishlist;
     }
 }
 

@@ -16,3 +16,16 @@ functions:
       - httpApi:
           path: /
           method: get
+  """
+  ingress lambdas:
+    - signup handler: sign up for new account (should be immediate)
+    - login handler: log into existing account (should be immediate)
+    - claimed product handler: claim a product  (can be queued)
+    - follow user handler: follow a user  (can be queued)
+    - see my claimed products: look at products I've claimed for others
+
+
+  immediate lambdas
+    - get wishlist data
+    - get product data
+  """

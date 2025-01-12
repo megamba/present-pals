@@ -1,0 +1,37 @@
+name: Deploy Present Pals Application
+
+on:
+  push:
+    branches:
+      - development # Triggers deployment when changes are pushed to the 'main' branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+#     steps:
+#       # Step 1: Check out the repository
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       # Step 2: Set up Node.js environment
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: 16 # Use the Node.js version compatible with Serverless Framework
+
+#       # Step 3: Install dependencies
+#       - name: Install dependencies
+#         run: npm install
+
+#       # Step 4: Configure AWS credentials
+#       - name: Configure AWS credentials
+#         uses: aws-actions/configure-aws-credentials@v3
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: us-east-1 # Replace with your preferred AWS region
+
+#       # Step 5: Deploy with Serverless Framework
+#       - name: Deploy application
+#         run: npx serverless deploy

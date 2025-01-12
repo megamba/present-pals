@@ -175,6 +175,22 @@ export default function Home() {
           ))}
         </div>
         
+        {/* display wihslist buttons */}
+        {/* TODO: combine new wishlist button with wishlist button list */}
+        <div>
+          <h3 className={styles.listTitle}>Wishlists</h3>
+          <div className={styles.listButtonsContainer}>
+            {wishlists.map((list, index) => (
+              <ListButton
+                key={index}
+                wishlistId={list.wishlistId}
+                listTitle={list.wishlistTitle}
+                numProducts={list.wishlistNumProducts}
+              />
+            ))}
+          </div>
+        </div>
+        
       </main>
       <footer className={styles.footer}>
         <p>Created by the decepticon team</p>

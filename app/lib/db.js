@@ -12,9 +12,11 @@ export async function getUserData(userId) {
 
 // Simulate fetching wishlists for a user
 export async function fetchUserWishlists(userId) {
+  console.log('getting ', userId, ' wishlists')
     return new Promise((resolve) => {
         setTimeout(() => {
             const wishlists = sampleWishlists.filter((wishlist) => wishlist.userId === userId);
+            console.log('wishlists: ', wishlists)
             resolve(wishlists);
         }, 500); // Simulate network delay
     });
