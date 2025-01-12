@@ -16,15 +16,15 @@ provider:
   environment: 
     EVENT_BUS_ARN: ${env:EVENT_BUS_ARN}
   # global IAM permissions
-  # iam:
-  #   role:
-  #     statements:
-  #       - Effect: Allow
-  #         Action:
-  #           - logs:CreateLogGroup
-  #           - logs:CreateLogStream
-  #           - logs:PutLogEvents
-  #         Resource: "arn:aws:logs:*:*:*"
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+          Resource: "arn:aws:logs:*:*:*"
 
 functions:
   hello:
@@ -48,15 +48,18 @@ functions:
   """
   Functions to handle logging for the website
   """
-  # push logs to EventBridge
-  pushLogEvent:
+  pushLogEvent: # push logs to EventBridge
     handler: handlers.log_handlers.push_log_event.pushLog
     events:
       - httpApi:
-          path: /write-log
+          path: /push-log
           method: post
-  # handle log events in the event bus
-  writeLogToDynamoDB:
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:us-west-1:232264745432:table/${env:DYNAMO_LOG_TABLE_NAME}
+  writeLogToDynamoDB: # handle log events in the event bus
     handler: handlers.log_handlers.push_log_event.pushLog
     # event bridge rule
     # events:
@@ -65,15 +68,14 @@ functions:
     #       pattern:
     #         source:
     #           - custom.present-pals-backend
-  # export logs from DynamoDB to S3 every month
-  exportLogsToS3:
+  exportLogsToS3: # export logs from DynamoDB to S3 every month
     handler: handlers.log_handlers.export_logs.exportLogs
     # event bridge scheduler 1x per month
     # events:
     #   - schedule: cron(0 0 1 * ? *)
   """
   ingress lambdas:
-    - claimed product handler: claim a product  (can be queued)
+    - claimed product handler: claim a product (can be queued)
     - follow user handler: follow a user  (can be queued)
     - see my claimed products: look at products I've claimed for others
     - logging API: collect info about when users:
