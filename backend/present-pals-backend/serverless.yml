@@ -8,6 +8,23 @@ service: present-pals-backend
 provider:
   name: aws
   runtime: python3.12
+  region: us-west-1
+  apiGateway:
+    restApiId: dj88crojti
+    restApiRootResourceId: 6xrfc2n9m3 
+  # Global environment variables (optional)
+  environment: 
+    EVENT_BUS_ARN: ${env:EVENT_BUS_ARN}
+  # global IAM permissions
+  # iam:
+  #   role:
+  #     statements:
+  #       - Effect: Allow
+  #         Action:
+  #           - logs:CreateLogGroup
+  #           - logs:CreateLogStream
+  #           - logs:PutLogEvents
+  #         Resource: "arn:aws:logs:*:*:*"
 
 functions:
   hello:
@@ -16,16 +33,71 @@ functions:
       - httpApi:
           path: /
           method: get
+    # per-function environment variables
+    # environment: # Function-specific environment variables
+    #   DYNAMODB_TABLE: "MyDynamoDBTable1"
+    #   API_KEY: "specificApiKeyForFunctionOne"
+    # specific IAM role per-function
+    # iamRoleStatements:
+    #   - Effect: Allow
+    #     Action:
+    #       - dynamodb:PutItem
+    #       - dynamodb:UpdateItem
+    #     Resource:
+    #       - arn:aws:dynamodb:us-east-1:123456789012:table/MyDynamoDBTable1
+  """
+  Functions to handle logging for the website
+  """
+  # push logs to EventBridge
+  pushLogEvent:
+    handler: handlers.log_handlers.push_log_event.pushLog
+    events:
+      - httpApi:
+          path: /write-log
+          method: post
+  # handle log events in the event bus
+  writeLogToDynamoDB:
+    handler: handlers.log_handlers.push_log_event.pushLog
+    # event bridge rule
+    # events:
+    #   - eventBridge:
+    #       eventBus: ${env:EVENT_BUS_ARN}
+    #       pattern:
+    #         source:
+    #           - custom.present-pals-backend
+  # export logs from DynamoDB to S3 every month
+  exportLogsToS3:
+    handler: handlers.log_handlers.export_logs.exportLogs
+    # event bridge scheduler 1x per month
+    # events:
+    #   - schedule: cron(0 0 1 * ? *)
   """
   ingress lambdas:
-    - signup handler: sign up for new account (should be immediate)
-    - login handler: log into existing account (should be immediate)
     - claimed product handler: claim a product  (can be queued)
     - follow user handler: follow a user  (can be queued)
     - see my claimed products: look at products I've claimed for others
+    - logging API: collect info about when users:
+      - when a new user is made
+      - when a user logs in
+      - start a process
+        - start making a new wishlist
+        - start making a new product
+      - finish a process
+        - finish making a wishlist
+        - finish making a product
+      - actions
+        - wishlist is shared
+        - navigate to a page
+        - complete a search for a person
+        - submit a friend request
+        - closing out of a modal
+          - new wishlist
+          - new proudct
 
 
   immediate lambdas
+    - signup handler: sign up for new account (should be immediate)
+    - login handler: log into existing account (should be immediate)
     - get wishlist data
     - get product data
   """
