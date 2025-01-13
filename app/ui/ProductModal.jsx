@@ -54,7 +54,7 @@ const ProductModal = ({
             className={styles.closeButton}
             aria-label="Close modal"
           >
-            ×
+            x
           </button>
 
           <div className={styles.imageContainer}>

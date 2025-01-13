@@ -44,3 +44,15 @@ export async function addWishlist(userId, wishlistData) {
     }, 500);
   });
 }
+
+
+export async function createNewProduct(userId, wishlistId, productData) {
+  console.log("Adding product to : ", wishlistId);
+  console.log('New product data: ', productData);
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log("Product added to Products DB");
+      resolve(wishlistData || null);
+    }, 500);
+  });
+}

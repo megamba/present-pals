@@ -4,6 +4,9 @@ import { getUserId } from '@/app/lib/firebase';
 import { fetchWishlistById } from '@/app/lib/db';
 import styles from './wishlistpage.module.css';
 import ProductModal from '../../ui/ProductModal';
+import NewProductModal from '../../ui/NewProductModal';
+import CreateProductButton from '../../ui/CreateProductButton';
+import { createNewProduct } from '../../lib/db';
 
 export default function WishlistPage({ params }) {
   const reoslvedParams = use(params);
@@ -12,10 +15,11 @@ export default function WishlistPage({ params }) {
   const [error, setError] = useState(null);
   const userId = getUserId();
   const [isProductModalOpen, setisProductModalOpen] = useState(false);
+  const [isNewProductModalOpen, setIsNewProductModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
-    console.log("WishlistPage: ", reoslvedParams.wishlistId)
+    console.log("WishlistPage: ", reoslvedParams.wishlist)
     const loadWishlist = async () => {
       try {
         const wishlistData = await fetchWishlistById(userId, reoslvedParams.wishlistId);
@@ -49,6 +53,26 @@ export default function WishlistPage({ params }) {
   const handleCloseModal = () => {
     setisProductModalOpen(false);
     setSelectedProduct(null);
+  };
+
+  const handleOpenNewProductModal = () => {
+    setIsNewProductModalOpen(true);
+    setisProductModalOpen(false);
+  };
+  
+  const handleCloseNewProductModal = () => {
+    setIsNewProductModalOpen(false);
+  };
+
+  const handleAddProduct = (newProduct) => {
+    // Add proudct to DB
+    createNewProduct(userId, 0, newProduct);
+    // if create is successful:
+      // Add the product to the wishlist
+      setWishlist((prev) => ({
+        ...prev,
+        wishlistProductList: [...prev.wishlistProductList, newProduct],
+      }));
   };
 
   if (loading) {
@@ -101,6 +125,8 @@ export default function WishlistPage({ params }) {
             <h2 className={styles.sectionTitle}>Products</h2>
             {wishlist?.wishlistProductList?.length > 0 ? (
               <div className={styles.productsGrid}>
+                {/* add product button */}
+                <CreateProductButton onClick={handleOpenNewProductModal} />
                 {wishlist.wishlistProductList.map((product) => (
                   // <Product button>
                   <div
@@ -148,11 +174,16 @@ export default function WishlistPage({ params }) {
             )}
             
           </div>
-      <ProductModal 
-        isOpen={isProductModalOpen}
-        onClose={handleCloseModal}
-        product={selectedProduct}
-      />
+          <ProductModal 
+            isOpen={isProductModalOpen}
+            onClose={handleCloseModal}
+            product={selectedProduct}
+          />
+          <NewProductModal
+            isOpen={isNewProductModalOpen}
+            onClose={handleCloseNewProductModal}
+            onAddProduct={handleAddProduct}
+          />
         </div>
       </div>
     </div>

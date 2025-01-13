@@ -4,7 +4,7 @@ import generateGUID from "./generateGUID";
 export const sampleProducts = {
   "productA": new Product({productId: `product-${generateGUID()}`, productTitle: "Product A",
        productPrice: 19.99, productDescription: "Description of Product A", 
-       productQuantity: 1, productFavorited: true,}),
+       productQuantity: 1, productFavorited: true, productImage: 'https://cannonkeys.com/cdn/shop/products/CK052722-413.jpg?v=1687201374&width=5000'}),
   "productB": new Product({productId: `product-${generateGUID()}`, productTitle: "Product B",
        productPrice: 29.99, productDescription: "Description of Product B", 
        productQuantity: 2, productFavorited: false}),

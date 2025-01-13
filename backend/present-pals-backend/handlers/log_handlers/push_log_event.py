@@ -1,4 +1,5 @@
 import boto3
+from datetime import datetime
 import json
 import logging
 from os import getenv
@@ -14,9 +15,9 @@ log_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messa
 console_handler.setFormatter(log_format)
 logger.addHandler(console_handler)  # Add handlers to logger
 
-# AWS resources
-dynamodb = boto3.resource('dynamodb', region_name=getenv('DEPLOY_REGION'))
 
+# AWS Clients
+client = boto3.client('events', region_name=getenv('DEPLOY_REGION'))
 
 def pushLog(event, context):
     """
@@ -25,42 +26,32 @@ def pushLog(event, context):
     """
     logger.info(f"Received log: {event}")
 
-    table_name = getenv('TABLE_NAME', 'logs') 
-    table = dynamodb.Table(table_name)
-
-    # Item to write (this can come from the event object, e.g., an API Gateway request)
-    # TODO: remove this, replace wiht event bus format for data
-    item = {
-        "id": "123",  # Primary key (partition key)
-        "name": "Sample Item",
-        "description": "This is a sample item for DynamoDB.",
-        "price": 19.99,
-        "inStock": True,
+    """
+    push an event to Event Bridge
+    """
+    # format event info
+    event_detail = {
+        "userId": "user123",
+        "action": "login",
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
 
-    try:
-        # Write the item to the DynamoDB table
-        response = table.put_item(Item=item)
-        print("Item successfully written to DynamoDB:", response)
-
-        return {
-            "statusCode": 200,
-            "body": json.dumps({
-                "message": "Item successfully written to DynamoDB.",
-                "item": item
-            })
-        }
-    except Exception as e:
-        print("Error writing item to DynamoDB:", e)
-        return {
-            "statusCode": 500,
-            "body": json.dumps({
-                "message": "Failed to write item to DynamoDB.",
-                "error": str(e)
-            })
-        }
+    # put event on event bus
+    response = client.put_events(
+        Entries=[
+            {
+                'Source': 'my.custom.source',
+                'DetailType': 'user-activity',
+                'Detail': json.dumps(event_detail),
+                'EventBusName': 'default'  # or your custom bus name
+            }
+        ]
+    )
 # end handler
 
 
 if __name__ == "__main__":
+    event = {
+
+    }
     pushLog(None, None)

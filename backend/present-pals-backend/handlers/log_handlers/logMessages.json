@@ -1,0 +1,16 @@
+{
+    "account": {
+        "account-creation-success": "Account created successfully",
+        "account-creation-failed": "Account creation failed",
+        "account-delete-success": "Account deleted successfully",
+        "account-delete-failed": "Account deletion failed",
+        "account-name-change-success": "Account name chagned successfully",
+        "account-name-change-failed": "Account name change failed"
+    },
+    "login-signup": {
+        "sign-in-success": "User sign in successful",
+        "sign-in-fail": "User sign in failed"
+    },
+    "wishlist": {},
+    "product": {}
+}
